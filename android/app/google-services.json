@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "444065958831",
+    "firebase_url": "https://foodzen-22a66.firebaseio.com",
+    "project_id": "foodzen-22a66",
+    "storage_bucket": "foodzen-22a66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444065958831:android:72601716347596f2",
+        "android_client_info": {
+          "package_name": "mobi.foodzen.foodzen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444065958831-658a165t9nqft74286mauhklg1ck7ef5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mobi.foodzen.foodzen",
+            "certificate_hash": "E829FAFA046731BE6A3215EE347FE331DE7E46EF"
+          }
+        },
+        {
+          "client_id": "444065958831-9pil980o6jm2bvrd7rvq90a601o3j8hb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBur5QOzqMo_DXixU5qEZKgOt56CSg4ShQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444065958831-9pil980o6jm2bvrd7rvq90a601o3j8hb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
