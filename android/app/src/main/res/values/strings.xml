@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">FoodZen</string>
 
+    <!--Keys-->
+    <string name="facebook_application_id" translatable="false">628332770673524</string>
+
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
