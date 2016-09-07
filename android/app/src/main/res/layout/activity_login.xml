@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="mobi.foodzen.foodzen.LoginActivity">
+    tools:context=".ui.LoginActivity">
 
     <!-- Login progress -->
     <ProgressBar
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -64,14 +64,40 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/sign_in_button_email"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="@string/action_sign_in_email"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/sign_in_button_google"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_sign_in_google"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/sign_in_button_facebook"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_sign_in_facebook"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/sign_in_button_twitter"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_sign_in_twitter"
+                android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
