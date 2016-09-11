@@ -72,7 +72,7 @@
                 android:text="@string/action_sign_in_email"
                 android:textStyle="bold" />
 
-            <Button
+            <com.google.android.gms.common.SignInButton
                 android:id="@+id/sign_in_button_google"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 android:text="@string/action_sign_in_google"
                 android:textStyle="bold" />
 
-            <Button
+            <com.facebook.login.widget.LoginButton
                 android:id="@+id/sign_in_button_facebook"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"

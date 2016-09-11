@@ -20,16 +20,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.SignInAccount;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -58,6 +67,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             }
         }
+    }
+
+    private void firebaseAuthWithFacebook(AccessToken account) {
+
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
@@ -142,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        Button mGoogleSignInButton = (Button) findViewById(R.id.sign_in_button_google);
+        SignInButton mGoogleSignInButton = (SignInButton) findViewById(R.id.sign_in_button_google);
         mGoogleSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +163,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.google_application_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -158,11 +171,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        Button mFacebookSignInButton = (Button) findViewById(R.id.sign_in_button_facebook);
-        mFacebookSignInButton.setOnClickListener(new OnClickListener() {
+
+        CallbackManager mCallbackManager = CallbackManager.Factory.create();
+        LoginButton mFacebookSignInButton = (LoginButton) findViewById(R.id.sign_in_button_facebook);
+        mFacebookSignInButton.setReadPermissions("email", "public_profile");
+        mFacebookSignInButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onClick(View view) {
-                attemptFacebookLogin();
+            public void onSuccess(LoginResult loginResult) {
+                firebaseAuthWithFacebook(loginResult.getAccessToken());
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
             }
         });
 
