@@ -16,22 +16,39 @@ class ApiPlaceController extends Controller
 
     public function actionCreate($name)
     {
-        return ["name"=>$name, "result"=>"ok"];
-    }
-
-    public function actionTest(){
         $time = microtime(true);
 
         $place = new Place();
+        $place->setScenario(Place::SCENARIO_CREATE);
         $place->nameNative = "Бэкенд имя";
         $place->nameTranslit = "Backend name";
+        $place->countryNative = "Беларусь";
+        $place->countryTranslit = "Belarus";
+        $place->cityNative = "Минск";
+        $place->cityTranslit = "Minsk";
+        $place->addressNative = "Независимости 157, 278";
+        $place->addressTranslit = "Nezavisimosti 157, 278";
+        $place->geo_instagram = [244454397];
+        $place->geo_coordinates = ["lat"=>53.935810, "lng"=>27.651270];
 
-        return $place->save();
+
+        if(!$place->save()) {
+            return $place->errors;
+        }
+        return "OK";
 
         return [$data,(microtime(true) - $time)];
-
-
     }
 
+    public function actionUpdate(){
+        $placeId= "_qCMcPPvAqxbw1J2f8RYvUo6kKtolOCQ";
+        $place = new Place();
+        if(!$place->loadById($placeId)){
+            return "PlaceId: {$placeId} not found";
+        }
+        $place->save();
+        return $place->attributes;
+
+    }
 
 }
