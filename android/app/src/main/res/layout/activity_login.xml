@@ -90,7 +90,7 @@
                 android:text="@string/action_sign_in_facebook"
                 android:textStyle="bold" />
 
-            <Button
+            <com.twitter.sdk.android.core.identity.TwitterLoginButton
                 android:id="@+id/sign_in_button_twitter"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"

@@ -2,7 +2,7 @@
     <string name="app_name">FoodZen</string>
 
     <!--Keys-->
-    <string name="facebook_application_id" translatable="false">628332770673524</string>
+    <string name="facebook_app_id">628332770673524</string>
     <!--<string name="google_application_id" translatable="false">4440659588319pil980o6jm2bvrd7rvq90a601o3j8hb.apps.googleusercontent.com
 </string>-->
 
