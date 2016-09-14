@@ -1,4 +1,4 @@
-package mobi.foodzen.foodzen;
+package mobi.foodzen.foodzen.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -6,9 +6,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import mobi.foodzen.foodzen.R;
+import mobi.foodzen.foodzen.dummy.DummyContent;
+
+public class MainActivity extends AppCompatActivity implements PhotoRestFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ImageButton buttonSearch = new ImageButton(this);
+        buttonSearch.setLayoutParams(new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        buttonSearch.setContentDescription("Search");
+        buttonSearch.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_search));
+        toolbar.addView(buttonSearch);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -30,11 +42,14 @@ public class MainActivity extends AppCompatActivity {
         if (extras != null) {
             String userName = extras.getString("user");
             if (userName != null) {
-                TextView textView = (TextView) findViewById(R.id.main_text);
-                textView.setText(userName);
+
             }
         }
 
     }
 
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
+    }
 }
