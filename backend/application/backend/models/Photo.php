@@ -1,11 +1,9 @@
 <?php
 namespace backend\models;
 
-
 use backend\assets\Factory;
-use Yii;
 
-interface iPlace {
+interface iPhoto {
     public function save();
     public function loadById($_id);
 }
@@ -13,27 +11,23 @@ interface iPlace {
 /**
  * Place model
  */
-class Place extends \yii\base\Model implements iPlace
+class Photo extends \yii\base\Model implements iPhoto
 {
     use FoodzenModelTrait;
 
-    const COLLECTION_NAME = "place";
+    const COLLECTION_NAME = "photo";
     const COLLECTION_ID_LENGTH = 32;
 
     const SCENARIO_CREATE = "Create";
     const SCENARIO_UPDATE = "Update";
+    const SCENARIO_DELETE = "Delete";
 
     public $_id;
-    public $nameNative;
-    public $nameTranslit;
-    public $countryNative;
-    public $countryTranslit;
-    public $cityNative;
-    public $cityTranslit;
-    public $addressNative;
-    public $addressTranslit;
-    public $geo_instagram;
-    public $geo_coordinates;
+    public $visitorId;
+    public $placeId;
+    public $review;
+    public $raiting;
+    public $geo;
     public $dateCreate;
     public $dateUpdate;
 
@@ -49,24 +43,11 @@ class Place extends \yii\base\Model implements iPlace
             [$this->getSafeAttributes(),  'required'],
 
             ['_id', 'string', 'max' => static::COLLECTION_ID_LENGTH, 'min' => static::COLLECTION_ID_LENGTH, "except"=>self::SCENARIO_CREATE],
-            ['nameNative', 'string', 'max' => 50],
-            ['nameTranslit', 'string', 'max' => 50],
-            ['countryNative', 'string', 'max' => 50],
-            ['countryTranslit', 'string', 'max' => 50],
-            ['cityNative', 'string', 'max' => 50],
-            ['cityTranslit', 'string', 'max' => 50],
-            ['addressNative', 'string', 'max' => 100],
-            ['addressTranslit', 'string', 'max' => 100],
-            ['geo_instagram', function ($attribute, $params) {
-                $attr=$this->$attribute;
-                if(
-                    !is_array($attr)
-                    || count(array_filter ( $attr, "is_int" )) != count($attr)
-                ){
-                    $this->addError($attribute, 'Invalid format. Expected array of integers');
-                }
-            }],
-            ['geo_coordinates', function ($attribute, $params) {
+            ['visitorId', 'string', 'max' => static::COLLECTION_ID_LENGTH, 'min' => static::COLLECTION_ID_LENGTH],
+            ['placeId', 'string', 'max' => Place::COLLECTION_ID_LENGTH, 'min' => Place::COLLECTION_ID_LENGTH],
+            ['review', 'string', 'max' => 4000],
+            ['raiting', 'numerical'],
+            ['geo', function ($attribute, $params) {
                 $attr=$this->$attribute;
                 if(
                     !is_array($attr)
@@ -87,9 +68,11 @@ class Place extends \yii\base\Model implements iPlace
             case self::SCENARIO_CREATE:
                 $saveMethod="set";
                 break;
-
             case self::SCENARIO_UPDATE:
                 $saveMethod="update";
+                break;
+            case self::SCENARIO_DELETE:
+                $saveMethod="delete";
                 break;
 
             default:
@@ -102,7 +85,12 @@ class Place extends \yii\base\Model implements iPlace
        if($this->validate()){
             $fireDb = Factory::getFirebaseDb();
             $path = $this->getDbPath() . $this->_id;
-            $fireDb->$saveMethod($path, $this->attributes);
+            if($this->scenario == self::SCENARIO_DELETE){
+                $fireDb->delete($path);
+            }
+            else{
+                $fireDb->$saveMethod($path, $this->attributes);
+            }
             return true;
        }
        return false;
@@ -110,7 +98,6 @@ class Place extends \yii\base\Model implements iPlace
 
 
     public function loadById($_id){
-        $this->setScenario(self::SCENARIO_UPDATE);
         $this->_id = $_id;
 
         $fireDb = Factory::getFirebaseDb();
@@ -127,7 +114,7 @@ class Place extends \yii\base\Model implements iPlace
         return true;
     }
 
-     /**
+    /**
      * Инициализирует частные аттрибуты, которые нельзя выставить из вне
      */
    private function initPrivateAttributes(){
@@ -145,16 +132,11 @@ class Place extends \yii\base\Model implements iPlace
    }
 
    private function getSafeAttributes(){
-       return ['nameNative',
-                'nameTranslit',
-                'countryNative',
-                'countryTranslit',
-                'cityNative',
-                'cityTranslit',
-                'addressNative',
-                'addressTranslit',
-                'geo_instagram',
-                'geo_coordinates'];
+       return ['visitorId',
+                'placeId',
+                'review',
+                'raiting',
+                'geo'];
    }
 
     private function getUnsafeAttributes(){
