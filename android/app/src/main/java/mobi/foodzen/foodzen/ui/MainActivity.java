@@ -7,14 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.dummy.DummyContent;
 
-public class MainActivity extends AppCompatActivity implements PhotoRestFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements RestPhotoFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

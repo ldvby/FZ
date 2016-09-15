@@ -4,14 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import mobi.foodzen.foodzen.ui.PhotoRestFragment.OnListFragmentInteractionListener;
+import java.util.List;
+
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.dummy.DummyContent.DummyItem;
-import mobi.foodzen.foodzen.ui.PhotoRestFragment;
-
-import java.util.List;
+import mobi.foodzen.foodzen.ui.RestPhotoFragment.OnListFragmentInteractionListener;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
@@ -31,15 +31,14 @@ public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRest
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_photorest, parent, false);
+                .inflate(R.layout.fragment_rest_photo_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mCaptionTextView.setText(mValues.get(position).content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,20 +59,20 @@ public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRest
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final ImageView mPhotoImageView;
+        public final TextView mCaptionTextView;
         public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mPhotoImageView = (ImageView) view.findViewById(R.id.rest_photo_list_item_photo);
+            mCaptionTextView = (TextView) view.findViewById(R.id.rest_photo_list_item_text);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mCaptionTextView.getText() + "'";
         }
     }
 }

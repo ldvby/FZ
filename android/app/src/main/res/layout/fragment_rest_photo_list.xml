@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.PhotoRestFragment"
-    tools:listitem="@layout/fragment_photorest" />
+    tools:context=".ui.RestPhotoFragment"
+    tools:listitem="@layout/fragment_rest_photo_list_item" />
