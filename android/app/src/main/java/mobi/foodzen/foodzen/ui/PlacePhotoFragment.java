@@ -21,7 +21,7 @@ import mobi.foodzen.foodzen.dummy.DummyContent.DummyItem;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class RestPhotoFragment extends Fragment {
+public class PlacePhotoFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -33,13 +33,13 @@ public class RestPhotoFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RestPhotoFragment() {
+    public PlacePhotoFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static RestPhotoFragment newInstance(int columnCount) {
-        RestPhotoFragment fragment = new RestPhotoFragment();
+    public static PlacePhotoFragment newInstance(int columnCount) {
+        PlacePhotoFragment fragment = new PlacePhotoFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -58,7 +58,7 @@ public class RestPhotoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_rest_photo_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_place_photo_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

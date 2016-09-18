@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.dummy.DummyContent;
 
-public class MainActivity extends AppCompatActivity implements RestPhotoFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements PlacePhotoFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

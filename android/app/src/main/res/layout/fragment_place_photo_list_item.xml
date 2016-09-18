@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<mobi.foodzen.foodzen.controls.PhotoCard xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rest_photo_list_item_card"
     android:layout_width="match_parent"
@@ -28,4 +28,4 @@
             android:layout_margin="@dimen/text_margin"
             android:textAppearance="?attr/textAppearanceListItem" />
     </LinearLayout>
-</mobi.foodzen.foodzen.controls.PhotoCard>
+</android.support.v7.widget.CardView>

@@ -11,7 +11,7 @@ import java.util.List;
 
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.dummy.DummyContent.DummyItem;
-import mobi.foodzen.foodzen.ui.RestPhotoFragment.OnListFragmentInteractionListener;
+import mobi.foodzen.foodzen.ui.PlacePhotoFragment.OnListFragmentInteractionListener;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
@@ -31,7 +31,7 @@ public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRest
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_rest_photo_list_item, parent, false);
+                .inflate(R.layout.fragment_place_photo_list_item, parent, false);
         return new ViewHolder(view);
     }
 
