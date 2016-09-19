@@ -36,11 +36,20 @@ class ApiPlaceController extends Controller
             return $place->errors;
         }
         return "OK";
-
-        return [$data,(microtime(true) - $time)];
     }
 
     public function actionUpdate(){
+        $placeId= "_qCMcPPvAqxbw1J2f8RYvUo6kKtolOCQ";
+        $place = new Place();
+        if(!$place->loadById($placeId)){
+            return "PlaceId: {$placeId} not found";
+        }
+        $place->save();
+        return $place->attributes;
+
+    }
+
+    public function actionGetUpdated(){
         $placeId= "_qCMcPPvAqxbw1J2f8RYvUo6kKtolOCQ";
         $place = new Place();
         if(!$place->loadById($placeId)){

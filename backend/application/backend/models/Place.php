@@ -36,6 +36,7 @@ class Place extends \yii\base\Model implements iPlace
     public $geo_coordinates;
     public $dateCreate;
     public $dateUpdate;
+    public $tsUpdate;
 
     public function scenarios(){
         return [
@@ -131,11 +132,12 @@ class Place extends \yii\base\Model implements iPlace
      * Инициализирует частные аттрибуты, которые нельзя выставить из вне
      */
    private function initPrivateAttributes(){
-       $this->dateUpdate = date("Y-m-d h:i:s");
+       $this->tsUpdate = $this->getUtcTime();
+       $this->dateUpdate = date("Y-m-d h:i:s", $this->tsUpdate);
        switch ($this->scenario){
            case self::SCENARIO_CREATE:
                $this->generateId();
-               $this->dateCreate = date("Y-m-d h:i:s");
+               $this->dateCreate = $this->dateUpdate;
                break;
 
            case self::SCENARIO_UPDATE:;
@@ -158,7 +160,7 @@ class Place extends \yii\base\Model implements iPlace
    }
 
     private function getUnsafeAttributes(){
-        return ['dateCreate', 'dateUpdate'];
+        return ['dateCreate', 'dateUpdate', 'tsUpdate'];
     }
 
 }
