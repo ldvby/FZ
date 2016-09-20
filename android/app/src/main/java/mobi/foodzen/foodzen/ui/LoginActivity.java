@@ -45,6 +45,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -55,6 +56,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import io.fabric.sdk.android.Fabric;
 import mobi.foodzen.foodzen.R;
+import mobi.foodzen.foodzen.prefs.RemotePreferences;
 
 /**
  * A login screen that offers login via email/password.
@@ -184,25 +186,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        mTwitterSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptTwitterLogin();
-            }
-        });
-
-
-
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-    }
 
-    private void attemptTwitterLogin() {
-    }
-
-    private void attemptFacebookLogin() {
-
+        RemotePreferences.getInstance().initializeRemotePreferences();
     }
 
     private void attemptGoogleLogin() {

@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:padding="5dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.PlacePhotoFragment"
     tools:listitem="@layout/fragment_place_photo_list_item" />

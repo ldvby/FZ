@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import mobi.foodzen.foodzen.R;
-import mobi.foodzen.foodzen.dummy.DummyContent;
+import mobi.foodzen.foodzen.entities.InstagramPhoto;
 
 public class MainActivity extends AppCompatActivity implements PlacePhotoFragment.OnListFragmentInteractionListener {
 
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements PlacePhotoFragmen
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(InstagramPhoto item) {
 
     }
 }
