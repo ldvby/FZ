@@ -55,14 +55,23 @@ abstract class XmlPipeController extends Controller {
     private function declareSchema(){
         $schema = '<sphinx:schema>';
         foreach ($this->fields() as $field){
-            $schema.='<sphinx:field name="'.$field.'/>';
+            $schema.='<sphinx:field name="'.$this->toFieldName($field).'"/>';
         }
         foreach ($this->attrs() as $attrName => $attr){
             $default = isset($attr["default"]) ? (' default="'.$attr["default"].'"') : "";
-            $schema.='<sphinx:attr name="'.$attrName.'" type="'.$attr["type"].'"'.$default.'/>';
+            $schema.='<sphinx:attr name="'.$this->toFieldName($attrName).'" type="'.$attr["type"].'"'.$default.'/>';
         }
         $schema .= '</sphinx:schema>';
         $this->writeData($schema);
+    }
+
+    /**
+     * Конвертирыет название поля в валидное название поля для сфинкса
+     * @param $name
+     */
+    private function toFieldName($name){
+        $validname = preg_replace("/([a-z0-9])([A-Z])/", "$1_$2", $name);
+        return strtolower($validname);
     }
 
     /**
@@ -72,7 +81,8 @@ abstract class XmlPipeController extends Controller {
     protected function declareItem($data){
         $item = '<sphinx:document id="'.($this->docId++).'">';
         foreach ($data as $k => $v){
-            $item.="<{$k}>".htmlspecialchars($v)."</{$k}>";
+            $fieldName = $this->toFieldName($k);
+            $item.="<{$fieldName}>".htmlspecialchars($v)."</{$fieldName}>";
         }
         $item .= '</sphinx:document>';
         $this->writeData($item);
