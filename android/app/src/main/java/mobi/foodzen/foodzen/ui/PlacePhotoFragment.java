@@ -2,6 +2,7 @@ package mobi.foodzen.foodzen.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.adapters.PhotoRestRecyclerViewAdapter;
-import mobi.foodzen.foodzen.dummy.DummyContent;
-import mobi.foodzen.foodzen.dummy.DummyContent.DummyItem;
+import mobi.foodzen.foodzen.business.PhotoBusiness;
+import mobi.foodzen.foodzen.entities.InstagramPhoto;
+import mobi.foodzen.foodzen.prefs.RemotePreferences;
+import mobi.foodzen.foodzen.transport.RestRequester;
 
 /**
  * A fragment representing a list of Items.
@@ -63,13 +77,41 @@ public class PlacePhotoFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            final RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new PhotoRestRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+            String accessToken = RemotePreferences.getInstance().getInstagramAccessToken();
+            String url = String.format(RestRequester.INSTAGRAM_PHOTOS_BY_PLACE_URL, 6808334, accessToken);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            List<InstagramPhoto> instagramPhotos = new ArrayList<>();
+                            try {
+                                JSONArray jsonArrayPhotos = response.getJSONArray("data");
+                                for (int i = 0; i < jsonArrayPhotos.length(); i++) {
+                                    JSONObject jsonPhoto = jsonArrayPhotos.getJSONObject(i);
+                                    if (jsonPhoto != null) {
+                                        instagramPhotos.add(PhotoBusiness.convertJSONtoPhoto(jsonPhoto));
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                Snackbar.make(PlacePhotoFragment.this.getView(), "Something wrong", Snackbar.LENGTH_LONG).show();
+                            }
+                            recyclerView.setAdapter(new PhotoRestRecyclerViewAdapter(getContext(), instagramPhotos, mListener));
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Snackbar.make(PlacePhotoFragment.this.getView(), "Empty list", Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+            RestRequester.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
         }
         return view;
     }
@@ -92,18 +134,7 @@ public class PlacePhotoFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(InstagramPhoto item);
     }
 }
