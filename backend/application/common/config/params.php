@@ -10,5 +10,10 @@ return [
         "path"=>""
     ],
 
+    "sphinx" => [
+        "host"=>"127.0.0.1",
+        "port"=>"9306",
+    ],
+
     "cacheDir" => realpath(__DIR__."/../../../cache/"),
 ];

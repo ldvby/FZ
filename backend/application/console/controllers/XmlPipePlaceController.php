@@ -25,7 +25,7 @@ class XmlPipePlaceController extends XmlPipeController  {
 
         $stepSize = 500;
         $lastPlaceId = null;
-        while (1) {
+        do {
 //            $placesJson = $fireDb->get($path, ["orderBy"=>'"tsUpdate"', "limitToFirst"=>1, "startAt"=>1474062965]);
             $aQuery =["orderBy"=>'"$key"', "limitToFirst"=>$stepSize];
             if(!is_null($lastPlaceId)) {
@@ -42,9 +42,7 @@ class XmlPipePlaceController extends XmlPipeController  {
                 $this->declareItem(array_intersect_key($place, $blankItem));
                 $lastPlaceId = $place["_id"];
             }
-
-            if(count($places)<$stepSize) break;
-        }
+        } while (count($places)>=$stepSize);
     }
 
     protected function fields(){
