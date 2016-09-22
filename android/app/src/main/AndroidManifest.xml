@@ -24,10 +24,15 @@
             android:name=".ui.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="201d4b1e2bf3668ce1f66010f3598f3f0f85388e" />
+
+        <activity android:name=".ui.UserActivity"></activity>
     </application>
 
 </manifest>
