@@ -31,7 +31,6 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.auth.api.signin.SignInAccount;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,9 +42,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
 import com.google.firebase.auth.TwitterAuthProvider;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -71,8 +68,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int RC_SIGN_IN_GOOGLE = 101;
 
-    enum LoginMethod {email, facebook, google, twitter}
-
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
@@ -84,6 +79,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
+
+    private boolean mIsUserCreated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -325,7 +322,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void loginSuccessfully(FirebaseUser user) {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent;
+        if (mIsUserCreated) {
+            intent = new Intent(LoginActivity.this, UserActivity.class);
+        } else {
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+        }
         intent.putExtra("user", user.getEmail());
         startActivity(intent);
     }
@@ -338,6 +340,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                         showProgress(false);
+                        mIsUserCreated = task.isSuccessful();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -345,8 +348,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        // ...
                     }
                 });
     }
