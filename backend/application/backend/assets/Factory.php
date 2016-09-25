@@ -5,6 +5,7 @@ namespace backend\assets;
 use Yii;
 use yii\db\Exception;
 use \Firebase\FirebaseLib;
+use yii\db\mssql\PDO;
 
 class Factory {
 
@@ -18,6 +19,17 @@ class Factory {
             }
         }
         return $fireDB;
+    }
+
+    public static function getSphinxDb(){
+        static $sphinxDB = null;
+        if(is_null($sphinxDB)) {
+            $settings = Yii::$app->params["sphinx"];
+            $dsn=sprintf("mysql:host=%s;port=%s;charset=utf8;", $settings["host"], $settings["port"]);
+            $sphinxDB = new PDO($dsn);
+            $sphinxDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }
+        return $sphinxDB;
     }
 
 }

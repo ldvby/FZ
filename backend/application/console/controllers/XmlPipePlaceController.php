@@ -39,6 +39,8 @@ class XmlPipePlaceController extends XmlPipeController  {
             }
 
             foreach ($places as $place){
+                $place["lat"] = !empty($place["geo_coordinates"]["lat"]) ? $place["geo_coordinates"]["lat"] : 0;
+                $place["lng"] = !empty($place["geo_coordinates"]["lng"]) ? $place["geo_coordinates"]["lng"] : 0;
                 $this->declareItem(array_intersect_key($place, $blankItem));
                 $lastPlaceId = $place["_id"];
             }
