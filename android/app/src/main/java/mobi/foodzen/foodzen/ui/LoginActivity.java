@@ -60,11 +60,11 @@ import mobi.foodzen.foodzen.prefs.RemotePreferences;
  */
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String USER_MAIL_EXTRA = "user_mail";
+    public static final String USER_ID_EXTRA = "user_id";
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "NmA8gf7gp7Q60xGdzDKHtJ50n";
     private static final String TWITTER_SECRET = "9pWEFVJTwckuuUhyahFLLW4Iy1EMKITsuMOtNhvaS04oMFu5iS";
-
-
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int RC_SIGN_IN_GOOGLE = 101;
 
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
 
-    private boolean mIsUserCreated;
+    private boolean mIsUserExists = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,12 +256,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+            mIsUserExists = true;
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             showProgress(false);
                             if (!task.isSuccessful()) {
+                                mIsUserExists = false;
                                 Snackbar.make(mLoginFormView, "Your credentials are not valid. Do you want to create new account with this credentials?", Snackbar.LENGTH_LONG)
                                         .setAction("Sign-up", new OnClickListener() {
                                             @Override
@@ -322,13 +324,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void loginSuccessfully(FirebaseUser user) {
-        Intent intent;
-        if (mIsUserCreated) {
-            intent = new Intent(LoginActivity.this, UserActivity.class);
-        } else {
-            intent = new Intent(LoginActivity.this, MainActivity.class);
-        }
-        intent.putExtra("user", user.getEmail());
+        Class intentClass = mIsUserExists ? MainActivity.class : UserActivity.class;
+
+        Intent intent = new Intent(LoginActivity.this, intentClass);
+        intent.putExtra(USER_MAIL_EXTRA, user.getEmail());
+        intent.putExtra(USER_ID_EXTRA, user.getUid());
         startActivity(intent);
     }
 
@@ -340,7 +340,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                         showProgress(false);
-                        mIsUserCreated = task.isSuccessful();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
