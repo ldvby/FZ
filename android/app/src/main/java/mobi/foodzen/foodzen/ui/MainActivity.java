@@ -11,11 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import mobi.foodzen.foodzen.FoodzenApplication;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.entities.InstagramPhoto;
 
-public class MainActivity extends AppCompatActivity implements PlacePhotoFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements PlacePhotoListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

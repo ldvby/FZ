@@ -35,7 +35,7 @@ import mobi.foodzen.foodzen.transport.RestRequester;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class PlacePhotoFragment extends Fragment {
+public class PlacePhotoListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -47,13 +47,13 @@ public class PlacePhotoFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PlacePhotoFragment() {
+    public PlacePhotoListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static PlacePhotoFragment newInstance(int columnCount) {
-        PlacePhotoFragment fragment = new PlacePhotoFragment();
+    public static PlacePhotoListFragment newInstance(int columnCount) {
+        PlacePhotoListFragment fragment = new PlacePhotoListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -100,7 +100,7 @@ public class PlacePhotoFragment extends Fragment {
                                     }
                                 }
                             } catch (JSONException e) {
-                                Snackbar.make(PlacePhotoFragment.this.getView(), "Something wrong", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(PlacePhotoListFragment.this.getView(), "Something wrong", Snackbar.LENGTH_LONG).show();
                             }
                             recyclerView.setAdapter(new PhotoRestRecyclerViewAdapter(getContext(), instagramPhotos, mListener));
                         }
@@ -108,7 +108,7 @@ public class PlacePhotoFragment extends Fragment {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Snackbar.make(PlacePhotoFragment.this.getView(), "Empty list", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(PlacePhotoListFragment.this.getView(), "Empty list", Snackbar.LENGTH_LONG).show();
                         }
                     });
             RestRequester.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);

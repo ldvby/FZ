@@ -30,7 +30,7 @@ import mobi.foodzen.foodzen.entities.Place;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class PlaceFragment extends Fragment {
+public class PlaceListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -42,13 +42,13 @@ public class PlaceFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PlaceFragment() {
+    public PlaceListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static PlaceFragment newInstance(int columnCount) {
-        PlaceFragment fragment = new PlaceFragment();
+    public static PlaceListFragment newInstance(int columnCount) {
+        PlaceListFragment fragment = new PlaceListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

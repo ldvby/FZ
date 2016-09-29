@@ -10,7 +10,7 @@ import android.view.View;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.entities.Place;
 
-public class SearchActivity extends AppCompatActivity implements PlaceFragment.OnListFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity implements PlaceListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,7 +16,7 @@ import java.util.List;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.entities.InstagramPhoto;
 import mobi.foodzen.foodzen.transport.RestRequester;
-import mobi.foodzen.foodzen.ui.PlacePhotoFragment.OnListFragmentInteractionListener;
+import mobi.foodzen.foodzen.ui.PlacePhotoListFragment.OnListFragmentInteractionListener;
 
 public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRestRecyclerViewAdapter.ViewHolder> {
 

@@ -10,18 +10,19 @@ import java.util.List;
 
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.entities.Place;
+import mobi.foodzen.foodzen.ui.PlaceListFragment;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Place} and makes a call to the
- * specified {@link mobi.foodzen.foodzen.ui.PlaceFragment.OnListFragmentInteractionListener}.
+ * specified {@link PlaceListFragment.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecyclerViewAdapter.ViewHolder> {
 
     private final List<Place> mValues;
-    private final mobi.foodzen.foodzen.ui.PlaceFragment.OnListFragmentInteractionListener mListener;
+    private final PlaceListFragment.OnListFragmentInteractionListener mListener;
 
-    public PlaceRecyclerViewAdapter(List<Place> items, mobi.foodzen.foodzen.ui.PlaceFragment.OnListFragmentInteractionListener listener) {
+    public PlaceRecyclerViewAdapter(List<Place> items, PlaceListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
