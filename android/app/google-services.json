@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "444065958831-c5nt42hk33255srelpinib260bfdt8cc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mobi.foodzen.foodzen",
+            "certificate_hash": "40727C1B980A994BE64654631CB65969BE60106E"
+          }
+        },
+        {
+          "client_id": "444065958831-iijen8hhtq50dnhgn5jm353dluutndhg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mobi.foodzen.foodzen",
+            "certificate_hash": "553A37E3C1956C100785FA0F9A14412455F409E3"
+          }
+        },
+        {
           "client_id": "444065958831-658a165t9nqft74286mauhklg1ck7ef5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

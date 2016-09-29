@@ -60,8 +60,6 @@ import mobi.foodzen.foodzen.prefs.RemotePreferences;
  */
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    public static final String USER_MAIL_EXTRA = "user_mail";
-    public static final String USER_ID_EXTRA = "user_id";
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "NmA8gf7gp7Q60xGdzDKHtJ50n";
     private static final String TWITTER_SECRET = "9pWEFVJTwckuuUhyahFLLW4Iy1EMKITsuMOtNhvaS04oMFu5iS";
@@ -122,6 +120,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 return false;
             }
         });
+        mEmailView.setText("www@www.www");
+        mPasswordView.setText("wwwwww");
+
 
         Button mEmailSignInButton = (Button) findViewById(R.id.sign_in_button_email);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -327,8 +328,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Class intentClass = mIsUserExists ? MainActivity.class : UserActivity.class;
 
         Intent intent = new Intent(LoginActivity.this, intentClass);
-        intent.putExtra(USER_MAIL_EXTRA, user.getEmail());
-        intent.putExtra(USER_ID_EXTRA, user.getUid());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

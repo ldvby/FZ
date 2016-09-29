@@ -1,5 +1,7 @@
 package mobi.foodzen.foodzen.ui;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import mobi.foodzen.foodzen.FoodzenApplication;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.entities.InstagramPhoto;
 
@@ -20,12 +23,42 @@ public class MainActivity extends AppCompatActivity implements PlacePhotoFragmen
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ImageButton buttonSearch = new ImageButton(this);
-        buttonSearch.setLayoutParams(new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        ImageButton buttonUser = new ImageButton(this);
+        buttonUser.setLayoutParams(new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        buttonSearch.setContentDescription("Search");
-        buttonSearch.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_search));
-        toolbar.addView(buttonSearch);
+        buttonUser.setContentDescription("User");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            buttonUser.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_info_details, getTheme()));
+        } else {
+            buttonUser.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_info_details));
+        }
+        buttonUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent userIntent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(userIntent);
+            }
+        });
+        toolbar.addView(buttonUser);
+
+        ImageButton buttonFind = new ImageButton(this);
+        buttonFind.setLayoutParams(new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        buttonFind.setContentDescription("Find");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            buttonFind.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_search, getTheme()));
+        } else {
+            buttonFind.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_search));
+        }
+        buttonFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(searchIntent);
+            }
+        });
+        toolbar.addView(buttonFind);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -35,15 +68,6 @@ public class MainActivity extends AppCompatActivity implements PlacePhotoFragmen
                         .setAction("Action", null).show();
             }
         });
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String userName = extras.getString("user");
-            if (userName != null) {
-
-            }
-        }
-
     }
 
     @Override

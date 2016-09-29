@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class Place {
-    private String mId;
+    private String m_Id;
     private String mNameNative;
     private String mNameTranslit;
     private String mCountryNative;
@@ -17,25 +17,26 @@ public class Place {
     private String mCityNative;
     private String mCityTranslit;
     private String mAddressNative;
-    private List<Integer> mInstagramGeo;
+    private String mAddressTranslit;
+    private List<Integer> mGeo_instagram;
     private Location mLocation;
-    private int mDateCreated;
-    private int mDateUpdated;
-
+    private int mDateCreate;
+    private int mDateUpdate;
     public Place() {
     }
 
-    public Place(String addressNative, String cityNative, String cityTranslit, String countryNative, String countryTranslit, int dateCreated, int dateUpdated, String id, List<Integer> instagramGeo, Location location, String nameNative, String nameTranslit) {
+    public Place(String addressNative, String addressTranslit, String cityNative, String cityTranslit, String countryNative, String countryTranslit, int dateCreated, int dateUpdated, String id, List<Integer> instagramGeo, Location location, String nameNative, String nameTranslit) {
 
         mAddressNative = addressNative;
+        mAddressTranslit = addressTranslit;
         mCityNative = cityNative;
         mCityTranslit = cityTranslit;
         mCountryNative = countryNative;
         mCountryTranslit = countryTranslit;
-        mDateCreated = dateCreated;
-        mDateUpdated = dateUpdated;
-        mId = id;
-        mInstagramGeo = instagramGeo;
+        mDateCreate = dateCreated;
+        mDateUpdate = dateUpdated;
+        m_Id = id;
+        mGeo_instagram = instagramGeo;
         mLocation = location;
         mNameNative = nameNative;
         mNameTranslit = nameTranslit;
@@ -81,36 +82,36 @@ public class Place {
         mCountryTranslit = countryTranslit;
     }
 
-    public int getDateCreated() {
-        return mDateCreated;
+    public int getDateCreate() {
+        return mDateCreate;
     }
 
-    public void setDateCreated(int dateCreated) {
-        mDateCreated = dateCreated;
+    public void setDateCreate(int dateCreate) {
+        mDateCreate = dateCreate;
     }
 
-    public int getDateUpdated() {
-        return mDateUpdated;
+    public int getDateUpdate() {
+        return mDateUpdate;
     }
 
-    public void setDateUpdated(int dateUpdated) {
-        mDateUpdated = dateUpdated;
+    public void setDateUpdate(int dateUpdate) {
+        mDateUpdate = dateUpdate;
     }
 
     public String getId() {
-        return mId;
+        return m_Id;
     }
 
     public void setId(String id) {
-        mId = id;
+        m_Id = id;
     }
 
     public List<Integer> getInstagramGeo() {
-        return mInstagramGeo;
+        return mGeo_instagram;
     }
 
     public void setInstagramGeo(List<Integer> instagramGeo) {
-        mInstagramGeo = instagramGeo;
+        mGeo_instagram = instagramGeo;
     }
 
     public Location getLocation() {
@@ -135,5 +136,13 @@ public class Place {
 
     public void setNameTranslit(String nameTranslit) {
         mNameTranslit = nameTranslit;
+    }
+
+    public String getAddressTranslit() {
+        return mAddressTranslit;
+    }
+
+    public void setAddressTranslit(String addressTranslit) {
+        mAddressTranslit = addressTranslit;
     }
 }

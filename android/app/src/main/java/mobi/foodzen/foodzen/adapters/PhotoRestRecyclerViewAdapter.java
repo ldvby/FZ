@@ -46,8 +46,6 @@ public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRest
         ImageLoader imageLoader = RestRequester.getInstance(mCtx).getImageLoader();
         holder.mPhotoImageView.setImageUrl(holder.mItem.getUrl(), imageLoader);
 
-
-
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

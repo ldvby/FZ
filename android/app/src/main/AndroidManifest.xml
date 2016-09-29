@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mobi.foodzen.foodzen">
+<manifest package="mobi.foodzen.foodzen"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,17 +34,22 @@
             android:name="io.fabric.ApiKey"
             android:value="201d4b1e2bf3668ce1f66010f3598f3f0f85388e" />
 
-        <activity android:name=".ui.UserActivity"></activity>
+        <activity android:name=".ui.UserActivity" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="mobi.foodzen.foodzen.files.PhotoFileProvider"
+            android:name=".files.PhotoFileProvider"
+            android:authorities="mobi.foodzen"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
+
+        <activity
+            android:name=".ui.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
