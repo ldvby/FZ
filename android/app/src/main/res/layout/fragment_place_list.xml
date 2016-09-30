@@ -10,4 +10,4 @@
                                         android:layout_marginRight="16dp"
                                         app:layoutManager="LinearLayoutManager"
                                         tools:context="mobi.foodzen.foodzen.ui.PlaceListFragment"
-                                        tools:listitem="@layout/fragment_place" />
+                                        tools:listitem="@layout/place_list_item" />

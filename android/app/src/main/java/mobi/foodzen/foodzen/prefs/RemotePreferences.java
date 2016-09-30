@@ -34,11 +34,11 @@ public class RemotePreferences {
         return ourInstance;
     }
 
-    public void forceGetRemoteConfig(){
+    public void forceGetRemoteConfig() {
         mInitialized = false;
     }
 
-    public void initializeRemotePreferences(){
+    public void initializeRemotePreferences() {
         if (!mInitialized) {
             mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
             mFirebaseRemoteConfig.setDefaults(R.xml.remote_preferences);
@@ -56,7 +56,7 @@ public class RemotePreferences {
         }
     }
 
-    public String getInstagramAccessToken(){
+    public String getInstagramAccessToken() {
         return mFirebaseRemoteConfig.getString(INSTAGRAM_ACCESS_TOKEN);
     }
 }

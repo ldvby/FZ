@@ -33,7 +33,7 @@ public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRest
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_place_photo_list_item, parent, false);
+                .inflate(R.layout.place_photo_list_item, parent, false);
         return new ViewHolder(view);
     }
 

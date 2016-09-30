@@ -39,7 +39,7 @@ public class PhotoBusiness {
         return instagramPhoto;
     }
 
-    public static Intent getCameraPhotoIntent(){
+    public static Intent getCameraPhotoIntent() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, PhotoFileProvider.CONTENT_URI);
         return cameraIntent;
@@ -47,13 +47,11 @@ public class PhotoBusiness {
 
     public static File getCameraPhotoAsFile() throws FileNotFoundException {
         File out = new File(FoodzenApplication.getCurrentApplicationContext().getFilesDir(), PhotoFileProvider.FILE_NAME);
-        if (!out.exists()){
+        if (!out.exists()) {
             throw new FileNotFoundException("Can't find file from camera");
         }
         return out;
     }
-
-
 
 
 }

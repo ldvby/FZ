@@ -30,5 +30,7 @@
     <string name="user_pic_add_or_update"><u>Add or update</u></string>
     <string name="user_pic_delete"><u>Delete</u></string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_place_details">PlaceDetailsActivity</string>
+    <string name="empty_view">There is no photo now</string>
 
 </resources>

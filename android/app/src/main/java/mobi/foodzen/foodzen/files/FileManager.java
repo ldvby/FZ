@@ -12,11 +12,11 @@ import mobi.foodzen.foodzen.utils.FileUtils;
 public class FileManager {
     private static FileManager ourInstance = new FileManager();
 
-    public static FileManager getInstance() {
-        return ourInstance;
+    private FileManager() {
     }
 
-    private FileManager() {
+    public static FileManager getInstance() {
+        return ourInstance;
     }
 
     public String getPhotosStoragePath() {

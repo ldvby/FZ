@@ -6,21 +6,8 @@ import android.support.v4.util.LruCache;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-
-import org.json.JSONObject;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import mobi.foodzen.foodzen.prefs.RemotePreferences;
 
 /**
  * Created by yegia on 17.09.2016.
@@ -58,9 +45,9 @@ public class RestRequester {
 
     public static RestRequester getInstance(Context context) {
         if (ourInstance == null) {
-            synchronized (RestRequester.class){
+            synchronized (RestRequester.class) {
                 if (ourInstance == null) {
-                    ourInstance =  new RestRequester(context);
+                    ourInstance = new RestRequester(context);
                 }
             }
         }

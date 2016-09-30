@@ -12,18 +12,18 @@ public class FoodzenApplication extends Application {
 
     private static Context sApplicationContext;
 
+    public static Context getCurrentApplicationContext() {
+        return sApplicationContext;
+    }
+
+    public static void showErrorInternetToast() {
+        Toast.makeText(sApplicationContext, "Bad internet connection. Please try again later", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         sApplicationContext = getApplicationContext();
-    }
-
-    public static Context getCurrentApplicationContext() {
-        return sApplicationContext;
-    }
-
-    public static void showErrorInternetToast(){
-        Toast.makeText(sApplicationContext, "Bad internet connection. Please try again later", Toast.LENGTH_LONG).show();
     }
 }

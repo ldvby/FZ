@@ -49,6 +49,10 @@
         <activity
             android:name=".ui.SearchActivity"
             android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.PlaceDetailsActivity"
+            android:label="@string/title_activity_place_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

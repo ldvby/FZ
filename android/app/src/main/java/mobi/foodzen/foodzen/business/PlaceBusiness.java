@@ -10,7 +10,7 @@ import mobi.foodzen.foodzen.entities.Place;
 
 public class PlaceBusiness {
 
-    public static Place convertFromDBHashMap(HashMap<String, String> hashMap){
+    public static Place convertFromDBHashMap(HashMap<String, String> hashMap) {
         Place place = new Place();
         place.setId(hashMap.get("_id"));
         place.setNameNative(hashMap.get("nameNative"));

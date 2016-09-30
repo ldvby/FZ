@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ViewSwitcher;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,17 +38,27 @@ import mobi.foodzen.foodzen.transport.RestRequester;
  */
 public class PlacePhotoListFragment extends Fragment {
 
+    private static final String EXTRAS_PLACE_IDS = "instagram_place_id";
+
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
+    private ArrayList<Integer> mPlaceInstagramId;
+    private RecyclerView mRecyclerView;
+    private ViewSwitcher mSwitcher;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
+
     public PlacePhotoListFragment() {
+        Bundle args = getArguments();
+        if (args.containsKey(EXTRAS_PLACE_IDS)) {
+            mPlaceInstagramId = args.getIntegerArrayList(EXTRAS_PLACE_IDS);
+        }
     }
 
     // TODO: Customize parameter initialization
@@ -74,18 +85,18 @@ public class PlacePhotoListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_photo_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            final RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
+        Context context = view.getContext();
+        mSwitcher = (ViewSwitcher) view.findViewById(R.id.switcher);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        if (mColumnCount <= 1) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        }
 
-            String accessToken = RemotePreferences.getInstance().getInstagramAccessToken();
-            String url = String.format(RestRequester.INSTAGRAM_PHOTOS_BY_PLACE_URL, 6808334, accessToken);
+        String accessToken = RemotePreferences.getInstance().getInstagramAccessToken();
+        if (mPlaceInstagramId != null && !mPlaceInstagramId.isEmpty()) {
+            String url = String.format(RestRequester.INSTAGRAM_PHOTOS_BY_PLACE_URL, mPlaceInstagramId.get(0), accessToken);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -102,7 +113,7 @@ public class PlacePhotoListFragment extends Fragment {
                             } catch (JSONException e) {
                                 Snackbar.make(PlacePhotoListFragment.this.getView(), "Something wrong", Snackbar.LENGTH_LONG).show();
                             }
-                            recyclerView.setAdapter(new PhotoRestRecyclerViewAdapter(getContext(), instagramPhotos, mListener));
+                            mRecyclerView.setAdapter(new PhotoRestRecyclerViewAdapter(getContext(), instagramPhotos, mListener));
                         }
                     },
                     new Response.ErrorListener() {
@@ -113,6 +124,7 @@ public class PlacePhotoListFragment extends Fragment {
                     });
             RestRequester.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
         }
+        showItems();
         return view;
     }
 
@@ -125,6 +137,16 @@ public class PlacePhotoListFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    void showItems() {
+        if (mRecyclerView.getAdapter() != null && mRecyclerView.getAdapter().getItemCount() > 0) {
+            if (R.id.list == mSwitcher.getNextView().getId()) {
+                mSwitcher.showNext();
+            }
+        } else if (R.id.empty_textview == mSwitcher.getNextView().getId()) {
+            mSwitcher.showNext();
         }
     }
 

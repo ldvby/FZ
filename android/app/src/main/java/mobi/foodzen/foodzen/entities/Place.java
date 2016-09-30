@@ -22,6 +22,7 @@ public class Place {
     private Location mLocation;
     private int mDateCreate;
     private int mDateUpdate;
+
     public Place() {
     }
 

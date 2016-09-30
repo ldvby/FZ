@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +35,7 @@ public class PhotoFileProvider extends ContentProvider {
     public boolean onCreate() {
         try {
             File mFile = new File(getContext().getFilesDir(), FILE_NAME);
-            if(!mFile.exists()) {
+            if (!mFile.exists()) {
                 mFile.createNewFile();
             }
             getContext().getContentResolver().notifyChange(CONTENT_URI, null);

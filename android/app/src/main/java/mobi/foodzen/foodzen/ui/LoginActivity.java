@@ -178,6 +178,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 TwitterSession session = result.data;
                 firebaseAuthWithTwitter(session);
             }
+
             @Override
             public void failure(TwitterException exception) {
                 Log.d("TwitterKit", "Login with Twitter failure", exception);
@@ -228,7 +229,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;

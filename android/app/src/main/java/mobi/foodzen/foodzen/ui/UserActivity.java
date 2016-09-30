@@ -162,8 +162,8 @@ public class UserActivity extends AppCompatActivity {
         }
     }
 
-    private void finishActivity(boolean goToMain){
-        if (goToMain){
+    private void finishActivity(boolean goToMain) {
+        if (goToMain) {
             Intent intent = new Intent(UserActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -214,7 +214,7 @@ public class UserActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            if (e instanceof StorageException){
+                            if (e instanceof StorageException) {
                                 finishActivity(finalGoToMain);
                             }
                         }
