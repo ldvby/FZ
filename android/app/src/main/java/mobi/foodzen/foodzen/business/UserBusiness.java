@@ -10,9 +10,4 @@ public class UserBusiness {
     private static FirebaseAuth mAuth;
 
 
-    static public boolean isUserLogged() {
-
-        return true;
-
-    }
 }

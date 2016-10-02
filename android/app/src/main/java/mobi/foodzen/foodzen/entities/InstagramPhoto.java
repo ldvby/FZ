@@ -7,14 +7,24 @@ public class InstagramPhoto {
     private String mId;
     private String mLocationName;
     private String mUrl;
+    private int mCreatedTime;
 
-    public InstagramPhoto(String id, String locationName, String url) {
+    public InstagramPhoto(int createdTime, String id, String locationName, String url) {
+        mCreatedTime = createdTime;
         mId = id;
         mLocationName = locationName;
         mUrl = url;
     }
 
     public InstagramPhoto() {
+    }
+
+    public int getCreatedTime() {
+        return mCreatedTime;
+    }
+
+    public void setCreatedTime(int createdTime) {
+        mCreatedTime = createdTime;
     }
 
     public String getId() {

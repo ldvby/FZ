@@ -10,33 +10,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.adapters.PlaceRecyclerViewAdapter;
-import mobi.foodzen.foodzen.business.PlaceBusiness;
 import mobi.foodzen.foodzen.entities.Place;
 
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnPlaceItemInteractionListener}
  * interface.
  */
 public class PlaceListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String ARG_PLACES_LIST = "places_list";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private ArrayList<Place> mPlaces;
+    private OnPlaceItemInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -47,10 +40,10 @@ public class PlaceListFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static PlaceListFragment newInstance(int columnCount) {
+    public static PlaceListFragment newInstance(ArrayList<Place> places) {
         PlaceListFragment fragment = new PlaceListFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putParcelableArrayList(ARG_PLACES_LIST, places);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +53,7 @@ public class PlaceListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mPlaces = getArguments().getParcelableArrayList(ARG_PLACES_LIST);
         }
     }
 
@@ -78,24 +71,9 @@ public class PlaceListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-            final DatabaseReference placesRef = mDatabase.getReference("place");
-            placesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<Place> placeList = new ArrayList<>();
-                    HashMap<String, HashMap<String, String>> placeListObj = (HashMap<String, HashMap<String, String>>) dataSnapshot.getValue();
-
-                    for (HashMap<String, String> stringHashMap : placeListObj.values()) {
-                        placeList.add(PlaceBusiness.convertFromDBHashMap(stringHashMap));
-                    }
-                    recyclerView.setAdapter(new PlaceRecyclerViewAdapter(placeList, mListener));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
+            if (mPlaces != null) {
+                recyclerView.setAdapter(new PlaceRecyclerViewAdapter(mPlaces, mListener));
+            }
         }
         return view;
     }
@@ -104,11 +82,11 @@ public class PlaceListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnPlaceItemInteractionListener) {
+            mListener = (OnPlaceItemInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnPlaceItemInteractionListener");
         }
     }
 
@@ -118,18 +96,7 @@ public class PlaceListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(Place item);
+    public interface OnPlaceItemInteractionListener {
+        void onPlaceItemClick(Place item);
     }
 }

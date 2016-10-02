@@ -21,6 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import mobi.foodzen.foodzen.R;
@@ -33,19 +35,17 @@ import mobi.foodzen.foodzen.transport.RestRequester;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnPlacePhotoInteractionListener}
  * interface.
  */
 public class PlacePhotoListFragment extends Fragment {
 
-    private static final String EXTRAS_PLACE_IDS = "instagram_place_id";
+    public static final String EXTRAS_PLACE_IDS = "instagram_place_id";
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 2;
-    private OnListFragmentInteractionListener mListener;
-    private ArrayList<Integer> mPlaceInstagramId;
+    private OnPlacePhotoInteractionListener mListener;
+    private ArrayList<Integer> mPlaceInstagramIds;
     private RecyclerView mRecyclerView;
     private ViewSwitcher mSwitcher;
 
@@ -55,18 +55,15 @@ public class PlacePhotoListFragment extends Fragment {
      */
 
     public PlacePhotoListFragment() {
-        Bundle args = getArguments();
-        if (args.containsKey(EXTRAS_PLACE_IDS)) {
-            mPlaceInstagramId = args.getIntegerArrayList(EXTRAS_PLACE_IDS);
-        }
+
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static PlacePhotoListFragment newInstance(int columnCount) {
+    public static PlacePhotoListFragment newInstance(ArrayList<Integer> instagram_ids) {
         PlacePhotoListFragment fragment = new PlacePhotoListFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putIntegerArrayList(EXTRAS_PLACE_IDS, instagram_ids);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,7 +73,7 @@ public class PlacePhotoListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mPlaceInstagramIds = getArguments().getIntegerArrayList(EXTRAS_PLACE_IDS);
         }
     }
 
@@ -95,34 +92,48 @@ public class PlacePhotoListFragment extends Fragment {
         }
 
         String accessToken = RemotePreferences.getInstance().getInstagramAccessToken();
-        if (mPlaceInstagramId != null && !mPlaceInstagramId.isEmpty()) {
-            String url = String.format(RestRequester.INSTAGRAM_PHOTOS_BY_PLACE_URL, mPlaceInstagramId.get(0), accessToken);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            List<InstagramPhoto> instagramPhotos = new ArrayList<>();
-                            try {
-                                JSONArray jsonArrayPhotos = response.getJSONArray("data");
-                                for (int i = 0; i < jsonArrayPhotos.length(); i++) {
-                                    JSONObject jsonPhoto = jsonArrayPhotos.getJSONObject(i);
-                                    if (jsonPhoto != null) {
-                                        instagramPhotos.add(PhotoBusiness.convertJSONtoPhoto(jsonPhoto));
+        if (mPlaceInstagramIds != null && !mPlaceInstagramIds.isEmpty()) {
+            final List<InstagramPhoto> instagramPhotos = new ArrayList<>();
+            for (int i = 0; i < mPlaceInstagramIds.size(); i++) {
+                final Integer placeInstagramId = mPlaceInstagramIds.get(i);
+                String url = String.format(RestRequester.INSTAGRAM_PHOTOS_BY_PLACE_URL, placeInstagramId, accessToken);
+                final int finalI = i;
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    JSONArray jsonArrayPhotos = response.getJSONArray("data");
+                                    for (int i = 0; i < jsonArrayPhotos.length(); i++) {
+                                        JSONObject jsonPhoto = jsonArrayPhotos.getJSONObject(i);
+                                        if (jsonPhoto != null) {
+                                            instagramPhotos.add(PhotoBusiness.convertJSONtoPhoto(jsonPhoto));
+                                        }
                                     }
+                                } catch (JSONException e) {
+                                    Snackbar.make(PlacePhotoListFragment.this.getView(), "Something wrong", Snackbar.LENGTH_LONG).show();
                                 }
-                            } catch (JSONException e) {
-                                Snackbar.make(PlacePhotoListFragment.this.getView(), "Something wrong", Snackbar.LENGTH_LONG).show();
+                                if (finalI == mPlaceInstagramIds.size() - 1) {
+                                    Collections.sort(instagramPhotos, new Comparator<InstagramPhoto>() {
+                                        @Override
+                                        public int compare(InstagramPhoto instagramPhoto, InstagramPhoto t1) {
+                                            return Integer.compare(instagramPhoto.getCreatedTime(), t1.getCreatedTime());
+                                        }
+                                    });
+                                    Collections.reverse(instagramPhotos);
+                                    mRecyclerView.setAdapter(new PhotoRestRecyclerViewAdapter(getContext(), instagramPhotos, mListener));
+                                    showItems();
+                                }
                             }
-                            mRecyclerView.setAdapter(new PhotoRestRecyclerViewAdapter(getContext(), instagramPhotos, mListener));
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Snackbar.make(PlacePhotoListFragment.this.getView(), "Empty list", Snackbar.LENGTH_LONG).show();
-                        }
-                    });
-            RestRequester.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //Snackbar.make(PlacePhotoListFragment.this.getView(), "Empty list", Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+                RestRequester.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
+            }
         }
         showItems();
         return view;
@@ -132,11 +143,11 @@ public class PlacePhotoListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnPlacePhotoInteractionListener) {
+            mListener = (OnPlacePhotoInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnPlaceItemInteractionListener");
         }
     }
 
@@ -156,7 +167,7 @@ public class PlacePhotoListFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(InstagramPhoto item);
+    public interface OnPlacePhotoInteractionListener {
+        void onPlacePhotoClick(InstagramPhoto item);
     }
 }

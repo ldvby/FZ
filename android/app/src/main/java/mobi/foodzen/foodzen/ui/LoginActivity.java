@@ -54,6 +54,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import io.fabric.sdk.android.Fabric;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.prefs.RemotePreferences;
+import mobi.foodzen.foodzen.prefs.UserPrefs;
 
 /**
  * A login screen that offers login via email/password.
@@ -93,10 +94,26 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    loginSuccessfully(user);
+                    UserPrefs.getInstance().initializeUser(new UserPrefs.InitializationCompleteListener() {
+                        @Override
+                        public void initializationCompleted() {
+                            loginSuccessfully(user);
+                            showProgress(false);
+                        }
+
+                        @Override
+                        public void initializationError() {
+                            showProgress(false);
+                            mIsUserExists = false;
+                            loginSuccessfully(user);
+
+                        }
+                    });
                 } else {
+                    showProgress(false);
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
@@ -263,8 +280,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            showProgress(false);
+
                             if (!task.isSuccessful()) {
+                                showProgress(false);
                                 mIsUserExists = false;
                                 Snackbar.make(mLoginFormView, "Your credentials are not valid. Do you want to create new account with this credentials?", Snackbar.LENGTH_LONG)
                                         .setAction("Sign-up", new OnClickListener() {
@@ -341,11 +359,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        showProgress(false);
+
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+                            showProgress(false);
                             Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -392,9 +411,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            showProgress(false);
                         }
                         // [START_EXCLUDE]
-                        showProgress(false);
+
                         // [END_EXCLUDE]
                     }
                 });
@@ -414,12 +434,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+                            showProgress(false);
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                         // [START_EXCLUDE]
-                        showProgress(false);
+
                         // [END_EXCLUDE]
                     }
                 });
@@ -439,12 +460,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+                            showProgress(false);
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                         // [START_EXCLUDE]
-                        showProgress(false);
+
                         // [END_EXCLUDE]
                     }
                 });

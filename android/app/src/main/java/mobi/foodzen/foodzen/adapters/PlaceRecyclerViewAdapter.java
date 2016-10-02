@@ -14,15 +14,15 @@ import mobi.foodzen.foodzen.ui.PlaceListFragment;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Place} and makes a call to the
- * specified {@link PlaceListFragment.OnListFragmentInteractionListener}.
+ * specified {@link PlaceListFragment.OnPlaceItemInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecyclerViewAdapter.ViewHolder> {
 
     private final List<Place> mValues;
-    private final PlaceListFragment.OnListFragmentInteractionListener mListener;
+    private final PlaceListFragment.OnPlaceItemInteractionListener mListener;
 
-    public PlaceRecyclerViewAdapter(List<Place> items, PlaceListFragment.OnListFragmentInteractionListener listener) {
+    public PlaceRecyclerViewAdapter(List<Place> items, PlaceListFragment.OnPlaceItemInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -38,7 +38,7 @@ public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mName.setText(mValues.get(position).getNameNative());
-        holder.mAddress.setText(mValues.get(position).getCityNative());
+        holder.mAddress.setText(mValues.get(position).getFullNativeAddress());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +46,7 @@ public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecycler
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onPlaceItemClick(holder.mItem);
                 }
             }
         });

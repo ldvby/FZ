@@ -27,6 +27,7 @@ public class PhotoBusiness {
     public static InstagramPhoto convertJSONtoPhoto(JSONObject JSONObject) throws JSONException {
         InstagramPhoto instagramPhoto = new InstagramPhoto();
         instagramPhoto.setId(JSONObject.getString("id"));
+        instagramPhoto.setCreatedTime(JSONObject.getInt("created_time"));
         JSONObject jsonLocation = JSONObject.getJSONObject("location");
         if (jsonLocation != null) {
             instagramPhoto.setLocationName(jsonLocation.getString("name"));

@@ -1,6 +1,6 @@
 package mobi.foodzen.foodzen.entities;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by yegia on 16.09.2016.
@@ -12,13 +12,13 @@ public class User {
     private String mLogin;
     private String mAvatar;
     private String mAbout;
-    private List<UserPhoto> mUserPhotoList;
-    private List<Place> mPlaceList;
+    private ArrayList<UserPhoto> mUserPhotoList = new ArrayList<>();
+    private ArrayList<Place> mPlaceList = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String about, String avatar, String email, String id, String login, List<Place> placeList, List<UserPhoto> userPhotoList) {
+    public User(String about, String avatar, String email, String id, String login, ArrayList<Place> placeList, ArrayList<UserPhoto> userPhotoList) {
         mAbout = about;
         mAvatar = avatar;
         mEmail = email;
@@ -68,19 +68,19 @@ public class User {
         mLogin = login;
     }
 
-    public List<Place> getPlaceList() {
+    public ArrayList<Place> getPlaceList() {
         return mPlaceList;
     }
 
-    public void setPlaceList(List<Place> placeList) {
+    public void setPlaceList(ArrayList<Place> placeList) {
         mPlaceList = placeList;
     }
 
-    public List<UserPhoto> getUserPhotoList() {
+    public ArrayList<UserPhoto> getUserPhotoList() {
         return mUserPhotoList;
     }
 
-    public void setUserPhotoList(List<UserPhoto> userPhotoList) {
+    public void setUserPhotoList(ArrayList<UserPhoto> userPhotoList) {
         mUserPhotoList = userPhotoList;
     }
 }

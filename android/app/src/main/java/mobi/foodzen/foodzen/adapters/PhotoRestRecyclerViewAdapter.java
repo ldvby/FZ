@@ -16,15 +16,15 @@ import java.util.List;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.entities.InstagramPhoto;
 import mobi.foodzen.foodzen.transport.RestRequester;
-import mobi.foodzen.foodzen.ui.PlacePhotoListFragment.OnListFragmentInteractionListener;
+import mobi.foodzen.foodzen.ui.PlacePhotoListFragment.OnPlacePhotoInteractionListener;
 
 public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRestRecyclerViewAdapter.ViewHolder> {
 
     private final List<InstagramPhoto> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final OnPlacePhotoInteractionListener mListener;
     private final Context mCtx;
 
-    public PhotoRestRecyclerViewAdapter(Context ctx, List<InstagramPhoto> items, OnListFragmentInteractionListener listener) {
+    public PhotoRestRecyclerViewAdapter(Context ctx, List<InstagramPhoto> items, OnPlacePhotoInteractionListener listener) {
         mValues = items;
         mListener = listener;
         mCtx = ctx;
@@ -52,7 +52,7 @@ public class PhotoRestRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRest
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onPlacePhotoClick(holder.mItem);
                 }
             }
         });

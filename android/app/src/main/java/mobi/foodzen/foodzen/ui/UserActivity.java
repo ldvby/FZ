@@ -1,145 +1,61 @@
 package mobi.foodzen.foodzen.ui;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import mobi.foodzen.foodzen.FoodzenApplication;
 import mobi.foodzen.foodzen.R;
 import mobi.foodzen.foodzen.business.PhotoBusiness;
+import mobi.foodzen.foodzen.entities.Place;
 import mobi.foodzen.foodzen.entities.User;
-import mobi.foodzen.foodzen.files.FileManager;
-import mobi.foodzen.foodzen.transport.RestRequester;
+import mobi.foodzen.foodzen.prefs.UserPrefs;
 
-public class UserActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity implements UserDetailsFragment.OnUserDetailsFragmentInteractionListener, PlaceListFragment.OnPlaceItemInteractionListener {
 
-    private static final int REQUEST_CAMERA_PHOTO = 302;
+    private static final int REQUEST_CAMERA_PHOTO = 301;
+    private static final int REQUEST_PLACE_DETAILS = 302;
 
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
-    private FloatingActionButton mDoneButton;
-    private TextView mUpdatePhotoLink;
-    private TextView mDeletePhotoLink;
-    private TextInputEditText mLoginEditText;
-    private TextInputEditText mAboutEditText;
-    private ImageView mUserImageView;
-
-    private File mUserPic;
-    private boolean mDeleteUserPic;
-
-    private FirebaseUser mFirebaseUser;
-    private FirebaseDatabase mFirebaseDatabase;
-    private StorageReference mStorageReference;
-    private User mUser;
-    private DatabaseReference mCurUserDBRef;
-    private StorageReference mUserPicRef;
+    private UserDetailsFragment mUserDetailsFragment;
+    private PlaceListFragment mPlaceListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mStorageReference = FirebaseStorage.getInstance().getReference();
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //getSupportActionBar().setTitle(R.string.user_profile);
 
-        mDoneButton = (FloatingActionButton) findViewById(R.id.user_done_fab);
-        mUpdatePhotoLink = (TextView) findViewById(R.id.user_add_update_pic);
-        mDeletePhotoLink = (TextView) findViewById(R.id.user_delete_pic);
-        mLoginEditText = (TextInputEditText) findViewById(R.id.user_login);
-        mAboutEditText = (TextInputEditText) findViewById(R.id.user_about);
-        mUserImageView = (ImageView) findViewById(R.id.user_pic);
+        mViewPager = (ViewPager) findViewById(R.id.user_viewpager);
+
+        mTabLayout = (TabLayout) findViewById(R.id.user_tabs);
+        mTabLayout.addTab(mTabLayout.newTab().setText("User"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Favorites"));
+//        mTabLayout.addTab(mTabLayout.newTab().setText("Photos"));
+        mTabLayout.setupWithViewPager(mViewPager);
 
 
-        mDoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveUser();
-            }
-        });
+        mUserDetailsFragment = UserDetailsFragment.newInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        mUpdatePhotoLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(PhotoBusiness.getCameraPhotoIntent(), REQUEST_CAMERA_PHOTO);
-            }
-        });
-
-        mDeletePhotoLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDeleteUserPic = true;
-                mUserPic = null;
-                mUserImageView.setImageBitmap(null);
-            }
-        });
-
-        DatabaseReference usersRef = mFirebaseDatabase.getReference("users");
-        if (usersRef != null) {
-            mCurUserDBRef = usersRef.child(mFirebaseUser.getUid());
-            if (mCurUserDBRef != null) {
-                mCurUserDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mUser = dataSnapshot.getValue(User.class);
-                        if (mUser != null) {
-                            mLoginEditText.setText(mUser.getLogin());
-                            mAboutEditText.setText(mUser.getAbout());
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        FoodzenApplication.showErrorInternetToast();
-                    }
-                });
-            }
+        User user = UserPrefs.getInstance().getUser();
+        if (user != null) {
+            mPlaceListFragment = PlaceListFragment.newInstance(user.getPlaceList());
         }
 
-        StringBuilder builder = new StringBuilder("userpics/");
-        if (mFirebaseUser != null) {
-            builder.append(mFirebaseUser.getUid()).append(".jpg");
-            if (mStorageReference != null) {
-                mUserPicRef = mStorageReference.child(builder.toString());
-                mUserPicRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        RestRequester.getInstance(UserActivity.this).getImageLoader().
-                                get(uri.toString(), ImageLoader.getImageListener(mUserImageView, 0, 0));
-                    }
-                });
-
-            }
-
-        }
-
+        mViewPager.setAdapter(new UserPagerAdapter(getSupportFragmentManager()));
 
     }
 
@@ -151,18 +67,23 @@ public class UserActivity extends AppCompatActivity {
             case REQUEST_CAMERA_PHOTO:
                 if (resultCode == RESULT_OK) {
                     try {
-                        mUserPic = PhotoBusiness.getCameraPhotoAsFile();
-                        mUserImageView.setImageBitmap(BitmapFactory.decodeFile(mUserPic.getAbsolutePath()));
-                        mDeleteUserPic = false;
+                        if (mUserDetailsFragment != null) {
+                            File userPic = PhotoBusiness.getCameraPhotoAsFile();
+                            mUserDetailsFragment.setUserPicture(userPic);
+                        }
                     } catch (FileNotFoundException e) {
                         Toast.makeText(UserActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
+            case REQUEST_PLACE_DETAILS:
+//                mPlaceListFragment = PlaceListFragment.newInstance(UserPrefs.getInstance().getUser().getPlaceList());
+                break;
         }
     }
 
-    private void finishActivity(boolean goToMain) {
+    @Override
+    public void onDoneButtonClick(boolean goToMain) {
         if (goToMain) {
             Intent intent = new Intent(UserActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -173,57 +94,48 @@ public class UserActivity extends AppCompatActivity {
         }
     }
 
-    private void saveUser() {
-        boolean goToMain = false;
-        if (mUser == null) {
-            mUser = new User();
-            goToMain = true;
-        }
-        mUser.setEmail(mFirebaseUser.getEmail());
-        mUser.setId(mFirebaseUser.getUid());
-        mUser.setAbout(mAboutEditText.getText().toString());
-        mUser.setLogin(mLoginEditText.getText().toString());
-        final boolean finalGoToMain = goToMain;
-        mCurUserDBRef.setValue(mUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                if (mUserPic != null) {
-                    try {
-                        File extFile = FileManager.getInstance().copyToInternalStorageWithGeneratingNewName(mUserPic);
-                        Uri fileUri = Uri.fromFile(extFile);
-                        mUserPicRef.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                finishActivity(finalGoToMain);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(UserActivity.this, "Unable to upload userpic to server", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        Toast.makeText(UserActivity.this, "Can't get user photo", Toast.LENGTH_SHORT).show();
-                    }
-                } else if (mDeleteUserPic) {
-                    mUserPicRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            finishActivity(finalGoToMain);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            if (e instanceof StorageException) {
-                                finishActivity(finalGoToMain);
-                            }
-                        }
-                    });
-                } else {
-                    finishActivity(finalGoToMain);
-                }
-            }
-        });
+    @Override
+    public void startCameraApplication() {
+        startActivityForResult(PhotoBusiness.getCameraPhotoIntent(), REQUEST_CAMERA_PHOTO);
+    }
 
+    @Override
+    public void onPlaceItemClick(Place item) {
+        Intent intent = new Intent(this, PlaceDetailsActivity.class);
+        intent.putExtra(PlaceDetailsActivity.EXTRAS_PLACE, item);
+        startActivityForResult(intent, REQUEST_PLACE_DETAILS);
+    }
+
+
+    public class UserPagerAdapter extends FragmentStatePagerAdapter {
+
+        String[] tabTitles = new String[]{"User", "Favorites"};
+
+        public UserPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return mUserDetailsFragment;
+                case 1:
+                    return mPlaceListFragment;
+                case 2:
+                    return null;
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
     }
 }
